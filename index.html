@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡路里计算器</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #F7F5F0; font-family: 'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif; }
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+function CalorieCalc() {
+  const [energy, setEnergy] = React.useState("");
+  const [grams, setGrams] = React.useState("");
+
+  const e = parseFloat(energy);
+  const g = parseFloat(grams);
+  const valid = !isNaN(e) && !isNaN(g) && g >= 0;
+  const totalKJ = valid ? (e / 100) * g : null;
+  const result = totalKJ !== null ? totalKJ / 4.184 : null;
+
+  return (
+    <div style={{
+      minHeight: "100vh",
+      background: "#F7F5F0",
+      padding: "32px 16px",
+      boxSizing: "border-box",
+    }}>
+      <div style={{ maxWidth: 420, margin: "0 auto" }}>
+        <div style={{ fontSize: 11, letterSpacing: 3, color: "#A89B8C", marginBottom: 6 }}>
+          CALORIE CALCULATOR
+        </div>
+        <div style={{ fontSize: 20, fontWeight: 700, color: "#2C2418", marginBottom: 24 }}>
+          按能量和克重算卡路里
+        </div>
+
+        <div style={{ background: "#fff", border: "1px solid #EDE8E0", borderRadius: 14, padding: "18px 18px 20px", marginBottom: 16 }}>
+          <div style={{ fontSize: 11, letterSpacing: 2, color: "#A89B8C", marginBottom: 8 }}>
+            每100g能量（kJ）
+          </div>
+          <input
+            type="number"
+            value={energy}
+            onChange={(e) => setEnergy(e.target.value)}
+            placeholder="看营养成分表，单位千焦"
+            style={{
+              width: "100%", boxSizing: "border-box",
+              border: "1px solid #EDE8E0", borderRadius: 10,
+              padding: "12px 14px", fontSize: 22, fontWeight: 700,
+              color: "#2C2418", outline: "none", fontFamily: "inherit",
+              marginBottom: 14,
+            }}
+          />
+
+          <div style={{ fontSize: 11, letterSpacing: 2, color: "#A89B8C", marginBottom: 8 }}>
+            实际吃了多少克
+          </div>
+          <input
+            type="number"
+            value={grams}
+            onChange={(e) => setGrams(e.target.value)}
+            placeholder="克重"
+            style={{
+              width: "100%", boxSizing: "border-box",
+              border: "1px solid #EDE8E0", borderRadius: 10,
+              padding: "12px 14px", fontSize: 22, fontWeight: 700,
+              color: "#2C2418", outline: "none", fontFamily: "inherit",
+            }}
+          />
+        </div>
+
+        <div style={{
+          background: result !== null ? "#2C2418" : "#fff",
+          border: result !== null ? "none" : "1px solid #EDE8E0",
+          borderRadius: 14, padding: "24px 20px", textAlign: "center",
+          transition: "background 0.2s",
+        }}>
+          <div style={{ fontSize: 11, letterSpacing: 2, color: result !== null ? "rgba(255,255,255,0.6)" : "#C0B4A8", marginBottom: 8 }}>
+            热量
+          </div>
+          <div style={{ fontSize: 40, fontWeight: 700, color: result !== null ? "#fff" : "#C0B4A8" }}>
+            {result !== null ? Math.round(result) : "—"}
+            <span style={{ fontSize: 16, fontWeight: 400, marginLeft: 6, color: result !== null ? "rgba(255,255,255,0.7)" : "#C0B4A8" }}>kcal</span>
+          </div>
+        </div>
+
+        <div style={{ fontSize: 11, color: "#B0A090", marginTop: 14, textAlign: "center" }}>
+          公式：能量(kJ) ÷ 100 × 克重 ÷ 4.184
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<CalorieCalc />);
+</script>
+</body>
+</html>
